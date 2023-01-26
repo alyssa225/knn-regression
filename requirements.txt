@@ -6,4 +6,4 @@ pandas
 # for FRQs and test cases only
 matplotlib
 pytest
-sklearn
+scikit-learn
