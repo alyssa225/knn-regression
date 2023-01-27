@@ -14,7 +14,7 @@ def test_np_suggestions():
     for fn in os.listdir(src.__path__[0]):
         if fn.endswith(".py"):
             fn = os.path.join(src.__path__[0], fn)
-            with open(fn) as inf:
+            with open(fn, encoding="utf8") as inf:
                 for i, line in enumerate(inf):
                     # Avoid complaining about comments that mention both
                     if "np.random" in line:
@@ -57,7 +57,7 @@ def test_imports():
     for fn in os.listdir(src.__path__[0]):
         if fn.endswith(".py"):
             fn = os.path.join(src.__path__[0], fn)
-            with open(fn) as inf:
+            with open(fn, encoding="utf8") as inf:
                 for i, line in enumerate(inf):
                     for key in disallowed:
                         if key in line:
@@ -73,7 +73,7 @@ def test_imports():
     for fn in os.listdir(src.__path__[0]):
         if fn.endswith(".py"):
             fn = os.path.join(src.__path__[0], fn)
-            with open(fn) as inf:
+            with open(fn, encoding="utf8") as inf:
                 for i, line in enumerate(inf):
                     for key in disallowed_funcs:
                         if key in line:
