@@ -16,7 +16,7 @@ def generate_random_numbers(degree, N, amount_of_noise):
         Use src.random to generate `coefficient value coefs`: an array of shape (degree+1, ) that contains 
         floats chosen uniformly at random between -10 and 10.
         Use src.random to generate `noise variable n`: an array of shape (N, 1) that contains 
-        floats chosen in the normal distribution. The mean is 0 and the variance is `amount_of_noise`.
+        floats chosen in the normal distribution. The mean is 0 and the standard deviation is `amount_of_noise`.
 
     Note that noise should have std `amount_of_noise`
         which we'll later multiply by `np.std(y)`
