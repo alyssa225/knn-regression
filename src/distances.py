@@ -15,7 +15,16 @@ def euclidean_distances(X, Y):
     Returns:
         D {np.ndarray}: MxN matrix with Euclidean distances between rows of X and rows of Y.
     """
-    raise NotImplementedError
+    assert X.shape[1] == Y.shape[1]
+    edist = np.ndarray((X.shape[0],Y.shape[0]))
+    for i in range(X.shape[0]):
+        for j in range(Y.shape[0]):
+            e = np.ndarray((X.shape[1],))
+            for k in range(X.shape[1]):
+                e[k] = (X[i,k]-Y[j,k])**2
+            edist[i,j] = np.sqrt(np.sum(e))
+    return edist
+
 
 
 def manhattan_distances(X, Y):
@@ -32,7 +41,15 @@ def manhattan_distances(X, Y):
     Returns:
         D {np.ndarray}: MxN matrix with Manhattan distances between rows of X and rows of Y.
     """
-    raise NotImplementedError
+    assert X.shape[1] == Y.shape[1]
+    mdist = np.ndarray((X.shape[0],Y.shape[0]))
+    for i in range(X.shape[0]):
+        for j in range(Y.shape[0]):
+            m = np.ndarray((X.shape[1],))
+            for k in range(X.shape[1]):
+                m[k] = abs(X[i,k]-Y[j,k])
+            mdist[i,j] = np.sum(m)
+    return mdist
 
 
 def cosine_distances(X, Y):
@@ -49,4 +66,14 @@ def cosine_distances(X, Y):
     Returns:
         D {np.ndarray}: MxN matrix with Cosine distances between rows of X and rows of Y.
     """
-    raise NotImplementedError
+    assert X.shape[1] == Y.shape[1]
+    cdist = np.ndarray((X.shape[0],Y.shape[0]))
+    for i in range(X.shape[0]):
+        for j in range(Y.shape[0]):
+            c = np.ndarray((X.shape[1],3))
+            for k in range(X.shape[1]):
+                c[k,0] = X[i,k]*Y[j,k]
+                c[k,1] = X[i,k]**2
+                c[k,2] = Y[j,k]**2
+            cdist[i,j] = 1-(np.sum(c[:,0])/(np.sqrt(np.sum(c[:,1]))*np.sqrt(np.sum(c[:,2]))))
+    return cdist

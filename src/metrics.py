@@ -18,5 +18,5 @@ def mean_squared_error(estimates, targets):
     Returns:
         MSE (float): the mean squared error across all estimates and targets
     """
-
-    raise NotImplementedError
+    assert estimates.shape[0]==targets.shape[0]
+    return np.sum((estimates[:]-targets[:])**2)/estimates.shape[0]
