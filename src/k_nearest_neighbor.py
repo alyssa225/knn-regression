@@ -78,12 +78,9 @@ class KNearestNeighbor():
                 (n_samples, 1).
         """
 
-        labels = np.ndarray((features.shape[0],1))
-        d = self.distance(self.features, features)
+        labels = np.zeros((features.shape[0],1))
+        d = self.distance(features, self.features)
         for i in range(d.shape[0]):
             sortindex = np.argsort(d[i,:])
-            t = np.zeros((self.n_neighbors,1))
-            for j in range(self.n_neighbors):
-                t[j] = self.targets[sortindex[j]]
-            labels[i] = self.aggregator(t)
+            labels[i] = self.aggregator(self.targets[sortindex[0:self.n_neighbors]])
         return labels
