@@ -7,7 +7,8 @@ def find_mode(arr):
     Return the mode (most common element) of `arr`.
     You may use your `numpy_practice` implementation from HW1.
     """
-    return NotImplementedError
+    mode, count = np.unique(arr, return_counts=True)
+    return mode[np.argmax(count)]
 
 
 class KNearestNeighbor():
@@ -56,7 +57,9 @@ class KNearestNeighbor():
             features {np.ndarray} -- Features of each data point, shape of (n_samples, n_features).
             targets -- Target labels for each data point, shape of (n_samples, 1).
         """
-        raise NotImplementedError
+
+        self.features = features
+        self.targets = targets
 
     def predict(self, features):
         """
@@ -75,4 +78,12 @@ class KNearestNeighbor():
                 (n_samples, 1).
         """
 
-        raise NotImplementedError
+        labels = np.ndarray((features.shape[0],1))
+        d = self.distance(self.features, features)
+        for i in range(d.shape[0]):
+            sortindex = np.argsort(d[i,:])
+            t = np.zeros((self.n_neighbors,1))
+            for j in range(self.n_neighbors):
+                t[j] = self.targets[sortindex[j]]
+            labels[i] = self.aggregator(t)
+        return labels

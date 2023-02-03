@@ -22,9 +22,7 @@ class PolynomialRegression():
         Args:
             degree (int): Degree used to fit the data.
         """
-        self.degree = degree
-        raise NotImplementedError
-    
+        self.degree = degree    
     def fit(self, features, targets):
         """
         Fit to the given data.
@@ -43,7 +41,13 @@ class PolynomialRegression():
         Returns:
             None (saves model weights to `self.weights`)
         """
-        raise NotImplementedError
+        assert features.shape[0]==targets.shape[0]
+        X = np.ones((features.shape[0], self.degree+1))
+        for i in range(features.shape[0]):
+            for d in range(self.degree+1):
+                X[i,d] = X[i,d]*features[i]**d
+        self.weights = np.matmul(np.matmul(np.linalg.inv(np.matmul(X.T,X)),X.T),targets)
+        
 
     def predict(self, features):
         """
@@ -56,5 +60,8 @@ class PolynomialRegression():
             predictions (np.ndarray): array of shape [N, 1] containing real-valued predictions
         """
         assert hasattr(self, "weights"), "Model hasn't been fit!"
-
-        raise NotImplementedError
+        X = np.ones((features.shape[0],1))
+        for d in range(1,self.degree+1):
+            X = np.append(X,features**d,axis=1)
+        P = np.matmul(X,self.weights)
+        return P

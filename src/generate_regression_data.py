@@ -22,7 +22,7 @@ def generate_random_numbers(degree, N, amount_of_noise):
         which we'll later multiply by `np.std(y)`
     """
 
-    raise NotImplementedError
+    return (src.random.uniform(-1,1,(N,1)),src.random.uniform(-10,10,(degree+1,)),src.random.normal(0,amount_of_noise,(N,1)))
 
 
 def generate_regression_data(degree, N, amount_of_noise=1.0):
@@ -53,4 +53,12 @@ def generate_regression_data(degree, N, amount_of_noise=1.0):
                         Polynomial of degree 'degree'.
 
     """
-    raise NotImplementedError
+    x,coeff,noise = generate_random_numbers(degree, N, amount_of_noise)
+    y = np.zeros((N,1))
+    for i in range(N):
+        for j in range(degree+1):
+            y[i] = y[i] + coeff[j]*x[i]**j
+    y = y+noise*np.std(y)
+    return x,y
+
+    
