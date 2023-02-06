@@ -28,6 +28,11 @@ def visualize_model(data, model, title):
     """
 
     X_train, X_test, y_train, y_test = data
+    print('visual data: ', data)
+    print('visual X_train: ', X_train)
+    print('visual X_test: ', X_test)
+    print('visual y_train: ', y_train)
+    print('visual y_test: ', y_test)
     model.fit(X_train, y_train)
     x_func = np.arange(-1.2, 1.2, 0.01).reshape(-1, 1)
     preds = model.predict(x_func)
@@ -141,7 +146,16 @@ def polynomial_regression_experiment():
     for amount in amounts:
         for degree in degrees:
             title = f"{degree}-degree Regression with {amount} points"
-            raise NotImplementedError
+            X_train, X_test, y_train, y_test = load_frq_data(amount)
+            print('Poly X_train: ', X_train)
+            print('Poly X_test: ', X_test)
+            print('Poly y_train: ', y_train)
+            print('Poly y_test: ', y_test)
+            data = (X_train, X_test, y_train, y_test)
+            print('Poly data: ', data)
+            train_mse, test_mse=visualize_model(data, PolynomialRegression, title)
+            print('finish Poly')
+
 
 
 def knn_regression_experiment():
@@ -160,7 +174,15 @@ def knn_regression_experiment():
     for amount in amounts:
         for neighbor in n_neighbors:
             title = f"{neighbor}-NN with {amount} points"
-            raise NotImplementedError
+            X_train, X_test, y_train, y_test = load_frq_data(amount)
+            print('knn X_train: ', X_train)
+            print('knn X_test: ', X_test)
+            print('knn y_train: ', y_train)
+            print('knn y_test: ', y_test)
+            data = (X_train, X_test, y_train, y_test)
+            print('knn data: ', data)
+            visualize_model(data, KNearestNeighbor, title)
+            print('finish knn')
 
 
 if __name__ == "__main__":
