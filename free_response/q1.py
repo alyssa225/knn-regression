@@ -28,11 +28,6 @@ def visualize_model(data, model, title):
     """
 
     X_train, X_test, y_train, y_test = data
-    print('visual data: ', data)
-    print('visual X_train: ', X_train)
-    print('visual X_test: ', X_test)
-    print('visual y_train: ', y_train)
-    print('visual y_test: ', y_test)
     model.fit(X_train, y_train)
     x_func = np.arange(-1.2, 1.2, 0.01).reshape(-1, 1)
     preds = model.predict(x_func)
@@ -68,7 +63,7 @@ def visualize_model(data, model, title):
     return train_mse, test_mse
 
 
-def part_a_plot():
+def part_a_plot(a, xaxis, train, test, title, save, axisname):
     """
     This uses matplotlib to create an example plot that you can modify
     for your answers to FRQ1 part a.
@@ -79,13 +74,13 @@ def part_a_plot():
         warnings.filterwarnings("ignore", category=DeprecationWarning)
         fig, axes = plt.subplots(nrows=4, ncols=1, figsize=(8, 8), sharex=True)
 
-    fig.suptitle("Demo plot for Q1 part a")
+    fig.suptitle(title)
 
     # One subplot for each amount of data
-    amounts = [8, 16, 64, 256]
+    amounts = a
 
     # Each plot has four points on the X-axis, either for `degree` or `k`
-    x_axis = [1, 2, 4, 16]
+    x_axis = xaxis
 
     for idx, amount in enumerate(amounts):
         axes[idx].set_title(
@@ -93,8 +88,12 @@ def part_a_plot():
 
         # This is some made-up data for the demo
         # You should replace this with your experimental results.
-        train_mse = np.random.uniform(1, 10, len(x_axis))
-        test_mse = np.random.uniform(1, 10, len(x_axis))
+        # print('train_mse: ', train)
+        # print('test_mse: ', test)
+        train_mse = train[idx,:]
+        test_mse = test[idx,:]
+        # print('train_mse[i]: ', train[idx])
+        # print('test_mse[i]: ', test[idx])
 
         # Plot a solid red line for train error
         axes[idx].plot(np.array(x_axis), train_mse, 'r-', label="Train")
@@ -104,8 +103,8 @@ def part_a_plot():
         axes[idx].set_ylabel('MSE')
         axes[idx].legend()
 
-    axes[idx].set_xlabel('X axis')
-    plt.savefig("free_response/demo_plot.png")
+    axes[idx].set_xlabel(axisname)
+    plt.savefig(save)
 
 
 def load_frq_data(amount):
@@ -142,20 +141,26 @@ def polynomial_regression_experiment():
     """
     degrees = [1, 2, 4, 16]
     amounts = [8, 16, 64, 256]
-
-    for amount in amounts:
-        for degree in degrees:
+    save = f"free_response/q1a_regression.png"
+    subtitle = f"Regression Plot"
+    train_mse = np.zeros((len(amounts),len(degrees)))
+    test_mse = np.zeros((len(amounts),len(degrees)))
+    for i,amount in enumerate(amounts):
+        # print('i: ',i)
+        for j,degree in enumerate(degrees):
             title = f"{degree}-degree Regression with {amount} points"
             X_train, X_test, y_train, y_test = load_frq_data(amount)
-            print('Poly X_train: ', X_train)
-            print('Poly X_test: ', X_test)
-            print('Poly y_train: ', y_train)
-            print('Poly y_test: ', y_test)
+            # print('Poly X_train: ', X_train)
+            # print('Poly X_test: ', X_test)
+            # print('Poly y_train: ', y_train)
+            # print('Poly y_test: ', y_test)
             data = (X_train, X_test, y_train, y_test)
-            print('Poly data: ', data)
-            train_mse, test_mse=visualize_model(data, PolynomialRegression, title)
-            print('finish Poly')
-
+            # print('Poly data: ', data)
+            model = PolynomialRegression(degree)
+            # print("visulize_model: ", visualize_model(data, model, title))
+            train_mse[i,j], test_mse[i,j]=visualize_model(data, model, title)
+            # print('finish Poly')
+    part_a_plot(amounts, degrees, train_mse, test_mse, subtitle, save, 'degrees')   
 
 
 def knn_regression_experiment():
@@ -171,22 +176,27 @@ def knn_regression_experiment():
     '''
     n_neighbors = [1, 2, 4, 8]
     amounts = [8, 16, 64, 256]
-    for amount in amounts:
-        for neighbor in n_neighbors:
+    save = f"free_response/q1a_knn.png"
+    subtitle = f"K Nearest Neighbor Plot"
+    train_mse = np.zeros((len(amounts),len(n_neighbors)))
+    test_mse = np.zeros((len(amounts),len(n_neighbors)))
+    for i,amount in enumerate(amounts):
+        for j,neighbor in enumerate(n_neighbors):
             title = f"{neighbor}-NN with {amount} points"
             X_train, X_test, y_train, y_test = load_frq_data(amount)
-            print('knn X_train: ', X_train)
-            print('knn X_test: ', X_test)
-            print('knn y_train: ', y_train)
-            print('knn y_test: ', y_test)
+            # print('knn X_train: ', X_train)
+            # print('knn X_test: ', X_test)
+            # print('knn y_train: ', y_train)
+            # print('knn y_test: ', y_test)
             data = (X_train, X_test, y_train, y_test)
-            print('knn data: ', data)
-            visualize_model(data, KNearestNeighbor, title)
-            print('finish knn')
-
+            # print('knn data: ', data)
+            model = KNearestNeighbor(neighbor, 'euclidean', "mean")
+            train_mse[i,j], test_mse[i,j] = visualize_model(data, model, title)
+            # print('finish knn')
+    part_a_plot(amounts, n_neighbors, train_mse, test_mse, subtitle, save, 'K')   
 
 if __name__ == "__main__":
     polynomial_regression_experiment()
     knn_regression_experiment()
-    part_a_plot()
+    # part_a_plot()
     plt.close('all')
